@@ -12,7 +12,6 @@
     <meta property="og:type" content="website">
 
     <!-- 구글 애널리틱스 (GA4) 탑재 -->
-    <!-- 참고: 'G-XXXXXXXXXX' 부분을 대표님의 실제 GA4 추적 ID로 변경해 주세요 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -61,16 +60,26 @@
 
     <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
         <!-- 좌측: 데이터 입력 패널 (인터페이스) -->
-        <div class="w-full lg:w-[400px] bg-white border-r border-gray-200 p-6 overflow-y-auto no-print flex-shrink-0">
+        <div class="w-full lg:w-[420px] bg-white border-r border-gray-200 p-6 overflow-y-auto no-print flex-shrink-0">
             <h2 class="text-lg font-bold mb-4 border-b-2 border-slate-800 pb-2">랜드사 원가 데이터 입력</h2>
             
             <div class="space-y-5 text-sm">
                 
                 <!-- 1. 기본 변수 -->
                 <div class="bg-gray-50 p-4 rounded border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-800 mb-3 flex items-center"><span class="w-5 h-5 bg-slate-700 text-white rounded-full inline-flex items-center justify-center text-xs mr-2">1</span>기본 변수 (분모)</h3>
+                    <h3 class="font-bold text-gray-800 mb-3 flex items-center"><span class="w-5 h-5 bg-slate-700 text-white rounded-full inline-flex items-center justify-center text-xs mr-2">1</span>기본 변수 (분모/환율)</h3>
                     <div class="space-y-2">
-                        <div class="flex items-center justify-between"><label class="text-gray-600">적용 환율</label><input type="number" step="0.1" id="inp-exchangeRate" class="w-24 border border-gray-300 rounded p-1.5 text-right font-bold text-blue-600 bg-blue-50"></div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-gray-600 font-bold">통화 (Currency)</label>
+                            <select id="inp-currency" class="w-32 border border-gray-300 rounded p-1.5 font-bold text-blue-700 bg-white">
+                                <option value="JPY">JPY (엔화)</option>
+                                <option value="USD">USD (달러)</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-gray-600">적용 환율</label>
+                            <input type="number" step="0.1" id="inp-exchangeRate" class="w-24 border border-gray-300 rounded p-1.5 text-right font-bold text-blue-600 bg-blue-50">
+                        </div>
                         <div class="flex items-center justify-between"><label class="text-gray-600">N빵 유료 인원수 (명)</label><input type="number" id="inp-payingPax" class="w-24 border border-gray-300 rounded p-1.5 text-right font-bold"></div>
                         <div class="flex items-center justify-between"><label class="text-gray-600">항공 발권 총 인원수</label><input type="number" id="inp-totalPax" class="w-24 border border-gray-300 rounded p-1.5 text-right"></div>
                         <div><label class="block text-gray-600 mb-1">상세 인원 표기</label><input type="text" id="inp-totalPaxStr" class="w-full border border-gray-300 rounded p-1.5"></div>
@@ -92,40 +101,41 @@
                     </div>
                 </div>
 
-                <!-- 3. 엔화 1인 단가 -->
+                <!-- 3. 현지 지상비 1인 단가 -->
                 <div class="bg-blue-50 p-4 rounded border border-blue-200 shadow-sm">
-                    <h3 class="font-bold text-blue-900 mb-3 flex items-center"><span class="w-5 h-5 bg-blue-800 text-white rounded-full inline-flex items-center justify-center text-xs mr-2">3</span>지상비 1인 단가 (JPY)</h3>
+                    <h3 class="font-bold text-blue-900 mb-3 flex items-center"><span class="w-5 h-5 bg-blue-800 text-white rounded-full inline-flex items-center justify-center text-xs mr-2">3</span>지상비 1인 단가 (<span class="curr-code">JPY</span>)</h3>
                     <div class="space-y-2">
-                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">호텔 1박 단가</label><label class="text-gray-600 text-xs">숙박 일수</label><input type="number" id="inp-hotelJpyPerNight" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-hotelNights" class="border border-gray-300 rounded p-1.5 text-right"></div>
-                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">싱글차지(1박단가)</label><label class="text-gray-600 text-xs">싱글룸 총 박수</label><input type="number" id="inp-hotelSingleJpy" class="border border-gray-300 rounded p-1.5 text-right" placeholder="단가"><input type="number" id="inp-hotelSingleQty" class="border border-gray-300 rounded p-1.5 text-right" placeholder="적용 박수"></div>
-                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">중식 1끼 단가</label><label class="text-gray-600 text-xs">중식 횟수</label><input type="number" id="inp-lunchJpy" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-lunchCount" class="border border-gray-300 rounded p-1.5 text-right"></div>
-                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">석식 1끼 단가</label><label class="text-gray-600 text-xs">석식 횟수</label><input type="number" id="inp-dinnerJpy" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-dinnerCount" class="border border-gray-300 rounded p-1.5 text-right"></div>
+                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">호텔 1박 단가</label><label class="text-gray-600 text-xs">숙박 일수</label><input type="number" id="inp-hotelLocalPerNight" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-hotelNights" class="border border-gray-300 rounded p-1.5 text-right"></div>
+                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">싱글차지(1박단가)</label><label class="text-gray-600 text-xs">싱글룸 총 박수</label><input type="number" id="inp-hotelSingleLocal" class="border border-gray-300 rounded p-1.5 text-right" placeholder="단가"><input type="number" id="inp-hotelSingleQty" class="border border-gray-300 rounded p-1.5 text-right" placeholder="적용 박수"></div>
+                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">중식 1끼 단가</label><label class="text-gray-600 text-xs">중식 횟수</label><input type="number" id="inp-lunchLocal" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-lunchCount" class="border border-gray-300 rounded p-1.5 text-right"></div>
+                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">석식 1끼 단가</label><label class="text-gray-600 text-xs">석식 횟수</label><input type="number" id="inp-dinnerLocal" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-dinnerCount" class="border border-gray-300 rounded p-1.5 text-right"></div>
                         
                         <div class="pt-2 border-t border-blue-200">
                             <label class="block text-gray-600 text-xs mb-1">관광지 입장료 (최대 5개)</label>
-                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm1Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 1"><input type="number" id="inp-adm1Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
-                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm2Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 2"><input type="number" id="inp-adm2Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
-                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm3Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 3"><input type="number" id="inp-adm3Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
-                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm4Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 4"><input type="number" id="inp-adm4Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
-                            <div class="flex gap-2"><input type="text" id="inp-adm5Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 5"><input type="number" id="inp-adm5Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm1Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 1"><input type="number" id="inp-adm1Local" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm2Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 2"><input type="number" id="inp-adm2Local" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm3Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 3"><input type="number" id="inp-adm3Local" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm4Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 4"><input type="number" id="inp-adm4Local" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2"><input type="text" id="inp-adm5Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 5"><input type="number" id="inp-adm5Local" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 4. 엔화 분배 총액 -->
+                <!-- 4. 현지 분배 총액 -->
                 <div class="bg-orange-50 p-4 rounded border border-orange-200 shadow-sm">
                     <h3 class="font-bold text-orange-900 mb-3 flex items-center"><span class="w-5 h-5 bg-orange-700 text-white rounded-full inline-flex items-center justify-center text-xs mr-2">4</span>공통 경비 (유료인원으로 N빵)</h3>
                     <p class="text-xs text-orange-700 mb-3">* 입력된 총액은 유료인원(<span id="out-payingPaxHint" class="font-bold"></span>명)으로 자동 분할됩니다.</p>
                     <div class="space-y-2">
-                        <div class="flex items-center justify-between"><label class="text-gray-700">전체 차량비 (JPY)</label><input type="number" id="inp-busTotalJpy" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
-                        <div class="flex items-center justify-between"><label class="text-gray-700">인솔비용 총액 (JPY)</label><input type="number" id="inp-tcTotalJpy" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
-                        <div class="flex items-center justify-between"><label class="text-gray-700">기사비용 총액 (JPY)</label><input type="number" id="inp-driverTotalJpy" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
-                        <div class="flex items-center justify-between"><label class="text-gray-700">가이드비용 총액 (JPY)</label><input type="number" id="inp-guideTotalJpy" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
+                        <div class="flex items-center justify-between"><label class="text-gray-700">랜드사 핸들링 총액 (<span class="curr-code">JPY</span>)</label><input type="number" id="inp-landFeeTotal" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
+                        <div class="flex items-center justify-between"><label class="text-gray-700">전체 차량비 (<span class="curr-code">JPY</span>)</label><input type="number" id="inp-busTotalLocal" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
+                        <div class="flex items-center justify-between"><label class="text-gray-700">인솔비용 총액 (<span class="curr-code">JPY</span>)</label><input type="number" id="inp-tcTotalLocal" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
+                        <div class="flex items-center justify-between"><label class="text-gray-700">기사비용 총액 (<span class="curr-code">JPY</span>)</label><input type="number" id="inp-driverTotalLocal" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
+                        <div class="flex items-center justify-between"><label class="text-gray-700">가이드비용 총액 (<span class="curr-code">JPY</span>)</label><input type="number" id="inp-guideTotalLocal" class="w-28 border border-gray-300 rounded p-1.5 text-right font-bold text-orange-800"></div>
                         
                         <div class="pt-2 border-t border-orange-200 mt-2">
                             <label class="text-gray-700 text-xs block mb-1">생수 분배 식 (단가 x 수량 x 일수)</label>
                             <div class="flex gap-1">
-                                <input type="number" id="inp-waterUnitJpy" class="w-1/3 border border-gray-300 rounded p-1.5 text-right" title="단가">
+                                <input type="number" id="inp-waterUnitLocal" class="w-1/3 border border-gray-300 rounded p-1.5 text-right" title="단가">
                                 <input type="number" id="inp-waterQty" class="w-1/3 border border-gray-300 rounded p-1.5 text-right" title="수량">
                                 <input type="number" id="inp-waterDays" class="w-1/3 border border-gray-300 rounded p-1.5 text-right" title="일수">
                             </div>
@@ -144,14 +154,15 @@
                 <div class="mb-6 pb-4 border-b-2 border-slate-800">
                     <div class="flex justify-between items-end mb-4">
                         <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">&lt;행사비 1인당 원가 블랙다운&gt;</h2>
-                        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhDlxjbueW0SvPAcv2A63S2A29MmX556P9-k4UAkVbMJ1xFNP_Hh2xcKk_G1JdNRdYoNe23sxVS7Xg7KX-AVvQ9lMg2SlseZ-7hIAP6xnnXEPFIQ5-Vf6udjQ1nj6QvTi-IDe9W-cxvlQfVoZ7lxXvWw5KNDEhdic3Cewf7qMdAzH8u46QTKLmPLRseN5M=s16000" alt="FLY UNITY" class="h-10">
+                        <!-- 플라이유니티 로고 확대 (h-10 -> h-16으로 변경) -->
+                        <img src="https://blogger.googleusercontent.com/img/a/AVvXsEhDlxjbueW0SvPAcv2A63S2A29MmX556P9-k4UAkVbMJ1xFNP_Hh2xcKk_G1JdNRdYoNe23sxVS7Xg7KX-AVvQ9lMg2SlseZ-7hIAP6xnnXEPFIQ5-Vf6udjQ1nj6QvTi-IDe9W-cxvlQfVoZ7lxXvWw5KNDEhdic3Cewf7qMdAzH8u46QTKLmPLRseN5M=s16000" alt="FLY UNITY" class="h-16 object-contain">
                     </div>
                     
                     <div class="text-sm space-y-2 mt-4 text-slate-800">
                         <div class="flex"><strong class="w-24">1. 여행기간 :</strong> <span id="out-travelPeriod"></span></div>
                         <div class="flex"><strong class="w-24">2. 인 원 :</strong> <span><span id="out-totalPaxStr"></span> (유료: <span id="out-payingPax"></span>명 / 전체: <span id="out-totalPax"></span>명)</span></div>
                         <div class="flex"><strong class="w-24">3. 여행지역 :</strong> <span id="out-travelArea"></span></div>
-                        <div class="flex"><strong class="w-24 text-blue-700">4. 환 율 :</strong> <span class="text-blue-700 font-bold">JPY 100 = KRW <span id="out-ex100"></span> (@ <span id="out-exchangeRate"></span>)</span></div>
+                        <div class="flex"><strong class="w-24 text-blue-700">4. 환 율 :</strong> <span class="text-blue-700 font-bold"><span id="out-exDisplay"></span> (@ <span id="out-exchangeRate"></span>)</span></div>
                     </div>
                 </div>
 
@@ -193,34 +204,34 @@
                             <td class="text-right-cell font-bold text-lg text-slate-800">₩<span id="out-krwSubtotal"></span></td>
                         </tr>
 
-                        <!-- 2. 지상비 엔화 -->
+                        <!-- 2. 지상비 외화 -->
                         <tr>
                             <td class="text-center-cell font-bold bg-white pt-4">호텔비</td>
                             <td class="bg-white pt-4">
-                                <span class="formula-text">¥<span id="txt-hotelJpyPerNight"></span> / 박 / 인 * <span id="txt-hotelNights"></span>박</span>
+                                <span class="formula-text"><span class="curr-sym">¥</span><span id="txt-hotelLocalPerNight"></span> / 박 / 인 * <span id="txt-hotelNights"></span>박</span>
                             </td>
-                            <td class="text-right-cell font-semibold bg-white pt-4">¥<span id="out-hotelPerPax"></span></td>
+                            <td class="text-right-cell font-semibold bg-white pt-4"><span class="curr-sym">¥</span><span id="out-hotelPerPax"></span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">호텔비(싱글업)</td>
                             <td class="bg-white">
                                 <span class="formula-text" id="out-hotelSingleFormula"><span class="text-gray-400">별도 산출</span></span>
                             </td>
-                            <td class="text-right-cell text-gray-400 bg-white">¥<span id="out-hotelSinglePerPax">0</span></td>
+                            <td class="text-right-cell text-gray-400 bg-white"><span class="curr-sym">¥</span><span id="out-hotelSinglePerPax">0</span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">중식비(<span id="txt-lunchCount1"></span>회)</td>
                             <td class="bg-white">
-                                <span class="formula-text">¥<span id="txt-lunchJpy"></span> / 끼 / 인 * <span id="txt-lunchCount2"></span>끼</span>
+                                <span class="formula-text"><span class="curr-sym">¥</span><span id="txt-lunchLocal"></span> / 끼 / 인 * <span id="txt-lunchCount2"></span>끼</span>
                             </td>
-                            <td class="text-right-cell font-semibold bg-white">¥<span id="out-lunchPerPax"></span></td>
+                            <td class="text-right-cell font-semibold bg-white"><span class="curr-sym">¥</span><span id="out-lunchPerPax"></span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">석식비(<span id="txt-dinnerCount1"></span>회)</td>
                             <td class="bg-white">
-                                <span class="formula-text">¥<span id="txt-dinnerJpy"></span> / 끼 / 인 * <span id="txt-dinnerCount2"></span>끼</span>
+                                <span class="formula-text"><span class="curr-sym">¥</span><span id="txt-dinnerLocal"></span> / 끼 / 인 * <span id="txt-dinnerCount2"></span>끼</span>
                             </td>
-                            <td class="text-right-cell font-semibold bg-white">¥<span id="out-dinnerPerPax"></span></td>
+                            <td class="text-right-cell font-semibold bg-white"><span class="curr-sym">¥</span><span id="out-dinnerPerPax"></span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">입장료</td>
@@ -231,55 +242,64 @@
                             <td class="text-right-cell font-semibold align-bottom bg-white" id="out-admPricesText">
                             </td>
                         </tr>
+                        <!-- 핸들링 비용 추가 -->
+                        <tr>
+                            <td class="text-center-cell font-bold bg-white">랜드수배피</td>
+                            <td class="bg-white">
+                                <div class="formula-text mb-1">랜드사 핸들링 비용</div>
+                                <span class="formula-text text-blue-600 font-semibold">총액 <span class="curr-sym">¥</span><span id="txt-landFeeTotal"></span> / <span id="txt-payingPax8"></span>명</span>
+                            </td>
+                            <td class="text-right-cell font-semibold text-blue-700 bg-white"><span class="curr-sym">¥</span><span id="out-landFeePerPax"></span></td>
+                        </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">차량비</td>
                             <td class="bg-white">
                                 <div class="formula-text mb-1">전일정 차량비+통행료+주차비</div>
-                                <span class="formula-text text-blue-600 font-semibold">총액 ¥<span id="txt-busTotalJpy"></span> / <span id="txt-payingPax3"></span>명</span>
+                                <span class="formula-text text-blue-600 font-semibold">총액 <span class="curr-sym">¥</span><span id="txt-busTotalLocal"></span> / <span id="txt-payingPax3"></span>명</span>
                             </td>
-                            <td class="text-right-cell font-semibold text-blue-700 bg-white">¥<span id="out-busPerPax"></span></td>
+                            <td class="text-right-cell font-semibold text-blue-700 bg-white"><span class="curr-sym">¥</span><span id="out-busPerPax"></span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">생수비</td>
                             <td class="bg-white">
-                                <span class="formula-text text-blue-600">(¥<span id="txt-waterUnitJpy"></span> * <span id="txt-waterQty"></span>개 * <span id="txt-waterDays"></span>일) / <span id="txt-payingPax4"></span>명</span>
+                                <span class="formula-text text-blue-600">(<span class="curr-sym">¥</span><span id="txt-waterUnitLocal"></span> * <span id="txt-waterQty"></span>개 * <span id="txt-waterDays"></span>일) / <span id="txt-payingPax4"></span>명</span>
                             </td>
-                            <td class="text-right-cell font-semibold text-blue-700 bg-white">¥<span id="out-waterPerPax"></span></td>
+                            <td class="text-right-cell font-semibold text-blue-700 bg-white"><span class="curr-sym">¥</span><span id="out-waterPerPax"></span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">인솔비용</td>
                             <td class="bg-white">
-                                <span class="formula-text text-blue-600">총액 ¥<span id="txt-tcTotalJpy"></span> / <span id="txt-payingPax5"></span>명</span>
+                                <span class="formula-text text-blue-600">총액 <span class="curr-sym">¥</span><span id="txt-tcTotalLocal"></span> / <span id="txt-payingPax5"></span>명</span>
                             </td>
-                            <td class="text-right-cell font-semibold text-blue-700 bg-white">¥<span id="out-tcPerPax"></span></td>
+                            <td class="text-right-cell font-semibold text-blue-700 bg-white"><span class="curr-sym">¥</span><span id="out-tcPerPax"></span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">기사비용</td>
                             <td class="bg-white">
                                 <div class="formula-text mb-1">식비 & 봉사료</div>
-                                <span class="formula-text text-blue-600 font-semibold">총액 ¥<span id="txt-driverTotalJpy"></span> / <span id="txt-payingPax6"></span>명</span>
+                                <span class="formula-text text-blue-600 font-semibold">총액 <span class="curr-sym">¥</span><span id="txt-driverTotalLocal"></span> / <span id="txt-payingPax6"></span>명</span>
                             </td>
-                            <td class="text-right-cell font-semibold text-blue-700 bg-white">¥<span id="out-driverPerPax"></span></td>
+                            <td class="text-right-cell font-semibold text-blue-700 bg-white"><span class="curr-sym">¥</span><span id="out-driverPerPax"></span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">가이드비용</td>
                             <td class="bg-white">
                                 <div class="formula-text mb-1">일비+호텔비+식비</div>
-                                <span class="formula-text text-blue-600 font-semibold">총액 ¥<span id="txt-guideTotalJpy"></span> / <span id="txt-payingPax7"></span>명</span>
+                                <span class="formula-text text-blue-600 font-semibold">총액 <span class="curr-sym">¥</span><span id="txt-guideTotalLocal"></span> / <span id="txt-payingPax7"></span>명</span>
                             </td>
-                            <td class="text-right-cell font-semibold text-blue-700 bg-white">¥<span id="out-guidePerPax"></span></td>
+                            <td class="text-right-cell font-semibold text-blue-700 bg-white"><span class="curr-sym">¥</span><span id="out-guidePerPax"></span></td>
                         </tr>
                         <tr class="print-bg-blue bg-blue-50 border-t-2 border-slate-600">
-                            <td class="text-center-cell font-bold text-blue-900">지상비 (엔화)</td>
+                            <td class="text-center-cell font-bold text-blue-900">지상비 (<span class="curr-name">엔화</span>)</td>
                             <td class="text-right-cell"></td>
-                            <td class="text-right-cell font-bold text-lg text-blue-900">¥<span id="out-jpySubtotal"></span></td>
+                            <td class="text-right-cell font-bold text-lg text-blue-900"><span class="curr-sym">¥</span><span id="out-localSubtotal"></span></td>
                         </tr>
                         <tr class="print-bg-gray bg-gray-100 border-b-2 border-slate-600">
                             <td class="text-center-cell font-bold text-slate-800">소계 (지상비 한화)</td>
                             <td class="text-center-cell">
-                                <span class="font-semibold text-slate-700">지상비 ¥<span id="txt-jpySubtotal"></span> @ <span id="txt-exchangeRate2"></span></span>
+                                <span class="font-semibold text-slate-700">지상비 <span class="curr-sym">¥</span><span id="txt-localSubtotal"></span> @ <span id="txt-exchangeRate2"></span></span>
                             </td>
-                            <td class="text-right-cell font-bold text-lg text-slate-800">₩<span id="out-convertedJpyToKrw"></span></td>
+                            <td class="text-right-cell font-bold text-lg text-slate-800">₩<span id="out-convertedLocalToKrw"></span></td>
                         </tr>
                         
                         <!-- 최종 합계 -->
@@ -294,10 +314,10 @@
                     </tbody>
                 </table>
 
-                <!-- 푸터 -->
+                <!-- 푸터 (투어메이커 공통 정책 반영) -->
                 <div class="mt-12 text-center pb-6">
                     <p class="text-[12px] text-[#6c757d] mb-2 font-medium">
-                        [System Powered by TOURMAKER] 본 행사비 블랙다운 산출 시스템은 <strong class="text-slate-700">투어메이커</strong>의 기획과 트래블 테크 기술 제휴로 제작되었습니다.
+                        [System Powered by TOURMAKER] 본 웹페이지는 <strong class="text-slate-700">투어메이커</strong>의 기획과 트래블 테크 기술 제휴로 제작되었습니다.
                     </p>
                     <a href="http://tourmaker.kr" target="_blank" rel="noopener noreferrer" 
                        class="inline-block px-4 py-2 border border-[#6c757d] rounded text-[#6c757d] hover:bg-gray-100 hover:text-slate-800 transition text-xs font-bold no-print">
@@ -311,8 +331,9 @@
 
     <!-- JavaScript 로직 -->
     <script>
-        // 초기 데이터 상태
+        // 초기 데이터 상태 (기본 엔화 세팅 + 핸들링비 추가)
         let data = {
+            currency: 'JPY',
             travelPeriod: '2026.05.19.(화)~05.22.(금)',
             totalPaxStr: '59+1TC+2TG',
             travelArea: '오사카(유니버셜)/교토 3박4일',
@@ -322,31 +343,32 @@
             flightPrice: 294600,
             ticketingFee: 22000,
             insurancePerPax: 5000,
-            hotelJpyPerNight: 9000,
+            hotelLocalPerNight: 9000,
             hotelNights: 3,
-            hotelSingleJpy: 0,
+            hotelSingleLocal: 0,
             hotelSingleQty: 0,
-            lunchJpy: 2000,
+            lunchLocal: 2000,
             lunchCount: 2,
-            dinnerJpy: 3000,
+            dinnerLocal: 3000,
             dinnerCount: 3,
             adm1Name: '청수사',
-            adm1Jpy: 500,
+            adm1Local: 500,
             adm2Name: '유니버셜',
-            adm2Jpy: 8000,
+            adm2Local: 8000,
             adm3Name: '',
-            adm3Jpy: 0,
+            adm3Local: 0,
             adm4Name: '',
-            adm4Jpy: 0,
+            adm4Local: 0,
             adm5Name: '',
-            adm5Jpy: 0,
-            busTotalJpy: 1000000,
-            waterUnitJpy: 120,
+            adm5Local: 0,
+            landFeeTotal: 0, // 랜드사 핸들링 비용 총액
+            busTotalLocal: 1000000,
+            waterUnitLocal: 120,
             waterQty: 63,
             waterDays: 3,
-            tcTotalJpy: 47000,
-            driverTotalJpy: 66000,
-            guideTotalJpy: 290000
+            tcTotalLocal: 47000,
+            driverTotalLocal: 66000,
+            guideTotalLocal: 290000
         };
 
         // DOM 요소에 값 세팅 및 계산
@@ -357,41 +379,54 @@
                 if (el) el.value = data[key];
             }
 
+            // 통화 기호 및 명칭 설정
+            const isJPY = data.currency === 'JPY';
+            const currSym = isJPY ? '¥' : '$';
+            const currCode = isJPY ? 'JPY' : 'USD';
+            const currName = isJPY ? '엔화' : '달러';
+
+            // DOM 내 통화 표기 일괄 업데이트
+            document.querySelectorAll('.curr-sym').forEach(el => el.innerHTML = currSym);
+            document.querySelectorAll('.curr-code').forEach(el => el.innerHTML = currCode);
+            document.querySelectorAll('.curr-name').forEach(el => el.innerHTML = currName);
+
             // 계산식 적용
             const payingPax = data.payingPax || 1; // 0으로 나누기 방지
             const flightPerPax = Math.round((data.flightPrice * data.totalPax) / payingPax);
             const ticketPerPax = Math.round((data.ticketingFee * data.totalPax) / payingPax);
             const krwSubtotal = flightPerPax + ticketPerPax + data.insurancePerPax;
 
-            const hotelPerPax = data.hotelJpyPerNight * data.hotelNights;
-            const hotelSinglePerPax = Math.round((data.hotelSingleJpy * data.hotelSingleQty) / payingPax);
-            const lunchPerPax = data.lunchJpy * data.lunchCount;
-            const dinnerPerPax = data.dinnerJpy * data.dinnerCount;
+            const hotelPerPax = data.hotelLocalPerNight * data.hotelNights;
+            const hotelSinglePerPax = Math.round((data.hotelSingleLocal * data.hotelSingleQty) / payingPax);
+            const lunchPerPax = data.lunchLocal * data.lunchCount;
+            const dinnerPerPax = data.dinnerLocal * data.dinnerCount;
             
             let admPerPax = 0;
             let admFormulaHtml = '';
             let admPricesHtml = '';
             for(let i=1; i<=5; i++) {
                 const name = data['adm'+i+'Name'];
-                const price = data['adm'+i+'Jpy'];
+                const price = data['adm'+i+'Local'];
                 if(name || price > 0) {
                     admPerPax += price;
-                    admFormulaHtml += `${name} ¥${Number(price).toLocaleString()} <br/>`;
-                    admPricesHtml += `<div class="text-gray-500 text-xs mb-1">¥${Number(price).toLocaleString()}</div>`;
+                    admFormulaHtml += `${name} ${currSym}${Number(price).toLocaleString()} <br/>`;
+                    admPricesHtml += `<div class="text-gray-500 text-xs mb-1">${currSym}${Number(price).toLocaleString()}</div>`;
                 }
             }
             if(admFormulaHtml) admFormulaHtml += ' / 인';
-            admPricesHtml += `<div class="border-t border-gray-300 mt-1 pt-1 text-slate-800 font-bold">¥${Number(admPerPax).toLocaleString()}</div>`;
+            admPricesHtml += `<div class="border-t border-gray-300 mt-1 pt-1 text-slate-800 font-bold">${currSym}${Number(admPerPax).toLocaleString()}</div>`;
             
-            const busPerPax = Math.round(data.busTotalJpy / payingPax);
-            const waterPerPax = Math.round((data.waterUnitJpy * data.waterQty * data.waterDays) / payingPax);
-            const tcPerPax = Math.round(data.tcTotalJpy / payingPax);
-            const driverPerPax = Math.round(data.driverTotalJpy / payingPax);
-            const guidePerPax = Math.round(data.guideTotalJpy / payingPax);
+            const landFeePerPax = Math.round(data.landFeeTotal / payingPax);
+            const busPerPax = Math.round(data.busTotalLocal / payingPax);
+            const waterPerPax = Math.round((data.waterUnitLocal * data.waterQty * data.waterDays) / payingPax);
+            const tcPerPax = Math.round(data.tcTotalLocal / payingPax);
+            const driverPerPax = Math.round(data.driverTotalLocal / payingPax);
+            const guidePerPax = Math.round(data.guideTotalLocal / payingPax);
 
-            const jpySubtotal = hotelPerPax + hotelSinglePerPax + lunchPerPax + dinnerPerPax + admPerPax + busPerPax + waterPerPax + tcPerPax + driverPerPax + guidePerPax;
-            const convertedJpyToKrw = Math.round(jpySubtotal * data.exchangeRate);
-            const totalCostKrw = krwSubtotal + convertedJpyToKrw;
+            // 지상비 소계 및 원화 환산
+            const localSubtotal = hotelPerPax + hotelSinglePerPax + lunchPerPax + dinnerPerPax + admPerPax + landFeePerPax + busPerPax + waterPerPax + tcPerPax + driverPerPax + guidePerPax;
+            const convertedLocalToKrw = Math.round(localSubtotal * data.exchangeRate);
+            const totalCostKrw = krwSubtotal + convertedLocalToKrw;
 
             // 텍스트 업데이트 헬퍼 함수
             const setHtml = (id, val) => {
@@ -407,8 +442,14 @@
             setHtml('out-payingPax', data.payingPax);
             setHtml('out-payingPaxHint', data.payingPax);
             setHtml('out-totalPax', data.totalPax);
-            setHtml('out-ex100', formatNum(data.exchangeRate * 100));
             setHtml('out-exchangeRate', data.exchangeRate);
+            
+            // 통화별 환율 표기 로직 (JPY는 100엔 기준, USD는 1달러 기준)
+            if (isJPY) {
+                setHtml('out-exDisplay', `JPY 100 = KRW ${formatNum(data.exchangeRate * 100)}`);
+            } else {
+                setHtml('out-exDisplay', `USD 1 = KRW ${formatNum(data.exchangeRate)}`);
+            }
             
             // 수식 내 텍스트 매핑
             setHtml('txt-flightPrice', formatNum(data.flightPrice));
@@ -421,11 +462,11 @@
             
             setHtml('txt-insurancePerPax', formatNum(data.insurancePerPax));
             
-            setHtml('txt-hotelJpyPerNight', formatNum(data.hotelJpyPerNight));
+            setHtml('txt-hotelLocalPerNight', formatNum(data.hotelLocalPerNight));
             setHtml('txt-hotelNights', data.hotelNights);
             
-            if (data.hotelSingleQty > 0 || data.hotelSingleJpy > 0) {
-                setHtml('out-hotelSingleFormula', `(¥${formatNum(data.hotelSingleJpy)} * ${data.hotelSingleQty}박) / ${payingPax}명`);
+            if (data.hotelSingleQty > 0 || data.hotelSingleLocal > 0) {
+                setHtml('out-hotelSingleFormula', `(${currSym}${formatNum(data.hotelSingleLocal)} * ${data.hotelSingleQty}박) / ${payingPax}명`);
                 setHtml('out-hotelSinglePerPax', formatNum(hotelSinglePerPax));
                 document.getElementById('out-hotelSinglePerPax').parentElement.classList.remove('text-gray-400');
             } else {
@@ -435,34 +476,38 @@
             }
             
             setHtml('txt-lunchCount1', data.lunchCount);
-            setHtml('txt-lunchJpy', formatNum(data.lunchJpy));
+            setHtml('txt-lunchLocal', formatNum(data.lunchLocal));
             setHtml('txt-lunchCount2', data.lunchCount);
             
             setHtml('txt-dinnerCount1', data.dinnerCount);
-            setHtml('txt-dinnerJpy', formatNum(data.dinnerJpy));
+            setHtml('txt-dinnerLocal', formatNum(data.dinnerLocal));
             setHtml('txt-dinnerCount2', data.dinnerCount);
             
             setHtml('out-admFormulaText', admFormulaHtml);
             setHtml('out-admPricesText', admPricesHtml);
 
-            setHtml('txt-busTotalJpy', formatNum(data.busTotalJpy));
+            // 핸들링 비용 매핑
+            setHtml('txt-landFeeTotal', formatNum(data.landFeeTotal));
+            setHtml('txt-payingPax8', data.payingPax);
+
+            setHtml('txt-busTotalLocal', formatNum(data.busTotalLocal));
             setHtml('txt-payingPax3', data.payingPax);
             
-            setHtml('txt-waterUnitJpy', formatNum(data.waterUnitJpy));
+            setHtml('txt-waterUnitLocal', formatNum(data.waterUnitLocal));
             setHtml('txt-waterQty', data.waterQty);
             setHtml('txt-waterDays', data.waterDays);
             setHtml('txt-payingPax4', data.payingPax);
             
-            setHtml('txt-tcTotalJpy', formatNum(data.tcTotalJpy));
+            setHtml('txt-tcTotalLocal', formatNum(data.tcTotalLocal));
             setHtml('txt-payingPax5', data.payingPax);
             
-            setHtml('txt-driverTotalJpy', formatNum(data.driverTotalJpy));
+            setHtml('txt-driverTotalLocal', formatNum(data.driverTotalLocal));
             setHtml('txt-payingPax6', data.payingPax);
             
-            setHtml('txt-guideTotalJpy', formatNum(data.guideTotalJpy));
+            setHtml('txt-guideTotalLocal', formatNum(data.guideTotalLocal));
             setHtml('txt-payingPax7', data.payingPax);
 
-            setHtml('txt-jpySubtotal', formatNum(jpySubtotal));
+            setHtml('txt-localSubtotal', formatNum(localSubtotal));
             setHtml('txt-exchangeRate2', data.exchangeRate);
 
             // 최종 결괏값 매핑
@@ -474,25 +519,40 @@
             setHtml('out-hotelPerPax', formatNum(hotelPerPax));
             setHtml('out-lunchPerPax', formatNum(lunchPerPax));
             setHtml('out-dinnerPerPax', formatNum(dinnerPerPax));
+            
+            setHtml('out-landFeePerPax', formatNum(landFeePerPax)); // 핸들링비 추가
             setHtml('out-busPerPax', formatNum(busPerPax));
             setHtml('out-waterPerPax', formatNum(waterPerPax));
             setHtml('out-tcPerPax', formatNum(tcPerPax));
             setHtml('out-driverPerPax', formatNum(driverPerPax));
             setHtml('out-guidePerPax', formatNum(guidePerPax));
             
-            setHtml('out-jpySubtotal', formatNum(jpySubtotal));
-            setHtml('out-convertedJpyToKrw', formatNum(convertedJpyToKrw));
+            setHtml('out-localSubtotal', formatNum(localSubtotal));
+            setHtml('out-convertedLocalToKrw', formatNum(convertedLocalToKrw));
             setHtml('out-totalCostKrw', formatNum(totalCostKrw));
         }
 
-        // 이벤트 리스너 등록
-        document.querySelectorAll('input').forEach(input => {
+        // 이벤트 리스너 등록 (select와 input 동시 처리)
+        document.querySelectorAll('input, select').forEach(input => {
             input.addEventListener('input', (e) => {
                 const key = e.target.id.replace('inp-', '');
                 if (e.target.type === 'number') {
                     data[key] = isNaN(e.target.value) || e.target.value === '' ? 0 : Number(e.target.value);
                 } else {
                     data[key] = e.target.value;
+                    
+                    // JPY -> USD 변경 시 환율, 단가 예시 자동 변경 로직 (선택적 편의 기능)
+                    if(key === 'currency') {
+                        if(data.currency === 'USD' && data.exchangeRate < 50) {
+                            // JPY 쓰다가 USD로 넘어오면 환율을 대략 1400 수준으로 세팅 유도
+                            document.getElementById('inp-exchangeRate').value = 1400;
+                            data.exchangeRate = 1400;
+                        } else if(data.currency === 'JPY' && data.exchangeRate > 100) {
+                            // USD 쓰다가 JPY로 넘어오면 다시 9.5 수준으로 세팅 유도
+                            document.getElementById('inp-exchangeRate').value = 9.5;
+                            data.exchangeRate = 9.5;
+                        }
+                    }
                 }
                 render();
             });
