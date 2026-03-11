@@ -96,12 +96,17 @@
                     <h3 class="font-bold text-blue-900 mb-3 flex items-center"><span class="w-5 h-5 bg-blue-800 text-white rounded-full inline-flex items-center justify-center text-xs mr-2">3</span>지상비 1인 단가 (JPY)</h3>
                     <div class="space-y-2">
                         <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">호텔 1박 단가</label><label class="text-gray-600 text-xs">숙박 일수</label><input type="number" id="inp-hotelJpyPerNight" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-hotelNights" class="border border-gray-300 rounded p-1.5 text-right"></div>
+                        <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">싱글차지(1박단가)</label><label class="text-gray-600 text-xs">싱글룸 총 박수</label><input type="number" id="inp-hotelSingleJpy" class="border border-gray-300 rounded p-1.5 text-right" placeholder="단가"><input type="number" id="inp-hotelSingleQty" class="border border-gray-300 rounded p-1.5 text-right" placeholder="적용 박수"></div>
                         <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">중식 1끼 단가</label><label class="text-gray-600 text-xs">중식 횟수</label><input type="number" id="inp-lunchJpy" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-lunchCount" class="border border-gray-300 rounded p-1.5 text-right"></div>
                         <div class="grid grid-cols-2 gap-2"><label class="text-gray-600 text-xs">석식 1끼 단가</label><label class="text-gray-600 text-xs">석식 횟수</label><input type="number" id="inp-dinnerJpy" class="border border-gray-300 rounded p-1.5 text-right"><input type="number" id="inp-dinnerCount" class="border border-gray-300 rounded p-1.5 text-right"></div>
                         
                         <div class="pt-2 border-t border-blue-200">
-                            <div class="flex gap-2 mb-2"><input type="text" id="inp-adm1Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm"><input type="number" id="inp-adm1Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
-                            <div class="flex gap-2"><input type="text" id="inp-adm2Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm"><input type="number" id="inp-adm2Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <label class="block text-gray-600 text-xs mb-1">관광지 입장료 (최대 5개)</label>
+                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm1Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 1"><input type="number" id="inp-adm1Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm2Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 2"><input type="number" id="inp-adm2Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm3Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 3"><input type="number" id="inp-adm3Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2 mb-1"><input type="text" id="inp-adm4Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 4"><input type="number" id="inp-adm4Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
+                            <div class="flex gap-2"><input type="text" id="inp-adm5Name" class="w-1/2 border border-gray-300 rounded p-1.5 text-sm" placeholder="관광지 5"><input type="number" id="inp-adm5Jpy" class="w-1/2 border border-gray-300 rounded p-1.5 text-right" placeholder="금액"></div>
                         </div>
                     </div>
                 </div>
@@ -196,8 +201,10 @@
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">호텔비(싱글업)</td>
-                            <td class="bg-white"><span class="formula-text text-gray-400">별도 산출</span></td>
-                            <td class="text-right-cell text-gray-400 bg-white">¥0</td>
+                            <td class="bg-white">
+                                <span class="formula-text" id="out-hotelSingleFormula"><span class="text-gray-400">별도 산출</span></span>
+                            </td>
+                            <td class="text-right-cell text-gray-400 bg-white">¥<span id="out-hotelSinglePerPax">0</span></td>
                         </tr>
                         <tr>
                             <td class="text-center-cell font-bold bg-white">중식비(<span id="txt-lunchCount1"></span>회)</td>
@@ -216,15 +223,10 @@
                         <tr>
                             <td class="text-center-cell font-bold bg-white">입장료</td>
                             <td class="bg-white">
-                                <div class="formula-text">
-                                    <span id="txt-adm1Name"></span> ¥<span id="txt-adm1Jpy1"></span> <br/>
-                                    <span id="txt-adm2Name"></span> ¥<span id="txt-adm2Jpy1"></span> / 인
+                                <div class="formula-text" id="out-admFormulaText">
                                 </div>
                             </td>
-                            <td class="text-right-cell font-semibold align-bottom bg-white">
-                                <div class="text-gray-500 text-xs mb-1">¥<span id="txt-adm1Jpy2"></span></div>
-                                <div class="text-gray-500 text-xs mb-1">¥<span id="txt-adm2Jpy2"></span></div>
-                                <div class="border-t border-gray-300 mt-1 pt-1">¥<span id="out-admPerPax"></span></div>
+                            <td class="text-right-cell font-semibold align-bottom bg-white" id="out-admPricesText">
                             </td>
                         </tr>
                         <tr>
@@ -320,6 +322,8 @@
             insurancePerPax: 5000,
             hotelJpyPerNight: 9000,
             hotelNights: 3,
+            hotelSingleJpy: 0,
+            hotelSingleQty: 0,
             lunchJpy: 2000,
             lunchCount: 2,
             dinnerJpy: 3000,
@@ -328,6 +332,12 @@
             adm1Jpy: 500,
             adm2Name: '유니버셜',
             adm2Jpy: 8000,
+            adm3Name: '',
+            adm3Jpy: 0,
+            adm4Name: '',
+            adm4Jpy: 0,
+            adm5Name: '',
+            adm5Jpy: 0,
             busTotalJpy: 1000000,
             waterUnitJpy: 120,
             waterQty: 63,
@@ -352,9 +362,24 @@
             const krwSubtotal = flightPerPax + ticketPerPax + data.insurancePerPax;
 
             const hotelPerPax = data.hotelJpyPerNight * data.hotelNights;
+            const hotelSinglePerPax = Math.round((data.hotelSingleJpy * data.hotelSingleQty) / payingPax);
             const lunchPerPax = data.lunchJpy * data.lunchCount;
             const dinnerPerPax = data.dinnerJpy * data.dinnerCount;
-            const admPerPax = data.adm1Jpy + data.adm2Jpy;
+            
+            let admPerPax = 0;
+            let admFormulaHtml = '';
+            let admPricesHtml = '';
+            for(let i=1; i<=5; i++) {
+                const name = data['adm'+i+'Name'];
+                const price = data['adm'+i+'Jpy'];
+                if(name || price > 0) {
+                    admPerPax += price;
+                    admFormulaHtml += `${name} ¥${Number(price).toLocaleString()} <br/>`;
+                    admPricesHtml += `<div class="text-gray-500 text-xs mb-1">¥${Number(price).toLocaleString()}</div>`;
+                }
+            }
+            if(admFormulaHtml) admFormulaHtml += ' / 인';
+            admPricesHtml += `<div class="border-t border-gray-300 mt-1 pt-1 text-slate-800 font-bold">¥${Number(admPerPax).toLocaleString()}</div>`;
             
             const busPerPax = Math.round(data.busTotalJpy / payingPax);
             const waterPerPax = Math.round((data.waterUnitJpy * data.waterQty * data.waterDays) / payingPax);
@@ -362,7 +387,7 @@
             const driverPerPax = Math.round(data.driverTotalJpy / payingPax);
             const guidePerPax = Math.round(data.guideTotalJpy / payingPax);
 
-            const jpySubtotal = hotelPerPax + lunchPerPax + dinnerPerPax + admPerPax + busPerPax + waterPerPax + tcPerPax + driverPerPax + guidePerPax;
+            const jpySubtotal = hotelPerPax + hotelSinglePerPax + lunchPerPax + dinnerPerPax + admPerPax + busPerPax + waterPerPax + tcPerPax + driverPerPax + guidePerPax;
             const convertedJpyToKrw = Math.round(jpySubtotal * data.exchangeRate);
             const totalCostKrw = krwSubtotal + convertedJpyToKrw;
 
@@ -397,6 +422,16 @@
             setHtml('txt-hotelJpyPerNight', formatNum(data.hotelJpyPerNight));
             setHtml('txt-hotelNights', data.hotelNights);
             
+            if (data.hotelSingleQty > 0 || data.hotelSingleJpy > 0) {
+                setHtml('out-hotelSingleFormula', `(¥${formatNum(data.hotelSingleJpy)} * ${data.hotelSingleQty}박) / ${payingPax}명`);
+                setHtml('out-hotelSinglePerPax', formatNum(hotelSinglePerPax));
+                document.getElementById('out-hotelSinglePerPax').parentElement.classList.remove('text-gray-400');
+            } else {
+                setHtml('out-hotelSingleFormula', `<span class="text-gray-400">별도 산출</span>`);
+                setHtml('out-hotelSinglePerPax', '0');
+                document.getElementById('out-hotelSinglePerPax').parentElement.classList.add('text-gray-400');
+            }
+            
             setHtml('txt-lunchCount1', data.lunchCount);
             setHtml('txt-lunchJpy', formatNum(data.lunchJpy));
             setHtml('txt-lunchCount2', data.lunchCount);
@@ -405,12 +440,8 @@
             setHtml('txt-dinnerJpy', formatNum(data.dinnerJpy));
             setHtml('txt-dinnerCount2', data.dinnerCount);
             
-            setHtml('txt-adm1Name', data.adm1Name);
-            setHtml('txt-adm1Jpy1', formatNum(data.adm1Jpy));
-            setHtml('txt-adm1Jpy2', formatNum(data.adm1Jpy));
-            setHtml('txt-adm2Name', data.adm2Name);
-            setHtml('txt-adm2Jpy1', formatNum(data.adm2Jpy));
-            setHtml('txt-adm2Jpy2', formatNum(data.adm2Jpy));
+            setHtml('out-admFormulaText', admFormulaHtml);
+            setHtml('out-admPricesText', admPricesHtml);
 
             setHtml('txt-busTotalJpy', formatNum(data.busTotalJpy));
             setHtml('txt-payingPax3', data.payingPax);
@@ -441,7 +472,6 @@
             setHtml('out-hotelPerPax', formatNum(hotelPerPax));
             setHtml('out-lunchPerPax', formatNum(lunchPerPax));
             setHtml('out-dinnerPerPax', formatNum(dinnerPerPax));
-            setHtml('out-admPerPax', formatNum(admPerPax));
             setHtml('out-busPerPax', formatNum(busPerPax));
             setHtml('out-waterPerPax', formatNum(waterPerPax));
             setHtml('out-tcPerPax', formatNum(tcPerPax));
